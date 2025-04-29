@@ -8,8 +8,16 @@
 }
 
 .recipe div {
-    position: absolute;
-    align-items: center;
+  position: absolute;
+  align-items: center;
+}
+
+.recipe h1 {
+  color: #3a3a3a;
+  font-size: 0.6rem;
+  flex: 1;
+  margin: 0 1rem;
+  color: white;
 }
 
 .recipe h2 {
@@ -29,4 +37,3 @@
   padding: 0.5rem;
   border-radius: 12px;
 }
-

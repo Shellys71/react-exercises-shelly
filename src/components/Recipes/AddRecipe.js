@@ -3,13 +3,13 @@ import { useState } from "react";
 import classes from "./AddRecipe.module.css";
 import Card from "../UI/Card";
 import Button from "../UI/Button";
+import InputsList from "./InputsList";
 
 const AddRecipe = (props) => {
   const [enteredRecipe, setEnteredRecipe] = useState("");
-  const [enteredIngredients, setEnteredIngredients] = useState("");
-  const [enteredInstructions, setEnteredInstructions] = useState("");
+  const [enteredIngredients, setEnteredIngredients] = useState([]);
+  const [enteredInstructions, setEnteredInstructions] = useState([]);
   const [uploadedImage, setUploadedImage] = useState("");
-  let indexIngredientsInput = 1;
 
   const addRecipeHandler = (event) => {
     event.preventDefault();
@@ -20,8 +20,8 @@ const AddRecipe = (props) => {
       uploadedImage
     );
     setEnteredRecipe("");
-    setEnteredIngredients("");
-    setEnteredInstructions("");
+    setEnteredIngredients([]);
+    setEnteredInstructions([]);
     setUploadedImage("");
   };
 
@@ -29,23 +29,12 @@ const AddRecipe = (props) => {
     setEnteredRecipe(event.target.value);
   };
 
-  const ingredientsChangeHandler = (event) => {
-    console.log("hi");
-    setEnteredIngredients(event.target.value);
-    if (document.getElementById(`ingredients-${indexIngredientsInput}`) === null) {
-      let next = document.createElement("input");
-      next.id = `ingredients-${indexIngredientsInput}`;
-      next.setAttribute("type", "text");
-      next.setAttribute("value", enteredIngredients);
-      next.addEventListener("change", ingredientsChangeHandler);
-      document.getElementById("ingredients-container").appendChild(next);
-      console.log("hwew");
-    }
-    indexIngredientsInput++;
+  const ingredientChangeHandler = (ingredient) => {
+    setEnteredIngredients(ingredient);
   };
 
-  const instructionsChangeHandler = (event) => {
-    setEnteredInstructions(event.target.value);
+  const instructionsChangeHandler = (instruction) => {
+    setEnteredInstructions(instruction);
   };
 
   const imageChangeHandler = (event) => {
@@ -70,26 +59,10 @@ const AddRecipe = (props) => {
           onChange={recipeChangeHandler}
           required
         />
-        <label htmlFor="ingredients">Ingredients</label>
-        <div id="ingredients-container">
-          <input
-            id="ingredients-0"
-            type="text"
-            value={enteredIngredients}
-            onChange={ingredientsChangeHandler}
-            required
-          />
-        </div>
-        <label htmlFor="instructions">Instructions</label>
-        <div id="instructions-container">
-          <input
-            id="instructions"
-            type="text"
-            value={enteredInstructions}
-            onChange={instructionsChangeHandler}
-            required
-          />
-        </div>
+        <label>Ingredients</label>
+        <InputsList onAddInput={ingredientChangeHandler} />
+        <label>Instructions</label>
+        <InputsList onAddInput={instructionsChangeHandler} />
         <label htmlFor="image">Image</label>
         <input
           id="image"
