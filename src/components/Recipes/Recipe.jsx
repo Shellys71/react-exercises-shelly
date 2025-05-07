@@ -1,3 +1,4 @@
+import React from "react";
 import classes from "./Recipe.modul.css";
 
 const Recipe = (props) => {

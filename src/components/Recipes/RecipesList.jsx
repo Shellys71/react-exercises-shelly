@@ -1,3 +1,5 @@
+import React from "react";
+
 import Card from "../UI/Card";
 import Recipe from "./Recipe";
 import classes from "./RecipesList.module.css";
