@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 
-import Card from "../UI/Card";
 import Recipe from "./Recipe";
 import classes from "./RecipesList.module.css";
 import RecipeContext from "../../store/recipe-context";
@@ -11,9 +10,8 @@ const RecipesList = () => {
   const { recipes } = recipeCtx;
 
   return (
-    <Card>
-      <ul className={classes.recipe}>
-        {recipes.map((recipe) => (
+    <ul className={classes.recipes}>
+      {recipes.map((recipe) => (
           <li key={recipe.id}>
             <Recipe
               recipe={recipe.recipe}
@@ -22,9 +20,8 @@ const RecipesList = () => {
               src={recipe.image}
             />
           </li>
-        ))}
-      </ul>
-    </Card>
+      ))}
+    </ul>
   );
 };
 

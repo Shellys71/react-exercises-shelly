@@ -1,11 +1,14 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 
 import classes from "./AddRecipe.module.css";
 import Card from "../UI/Card";
 import Button from "../UI/Button";
 import InputsList from "./InputsList";
+import RecipeContext from "../../store/recipe-context";
 
 const AddRecipe = (props) => {
+  const ctx = useContext(RecipeContext);
+
   const ingredientsInputsRef = useRef();
   const instructionsInputsRef = useRef();
 
@@ -31,7 +34,8 @@ const AddRecipe = (props) => {
     ingredientsInputsRef.current.initInputs();
     instructionsInputsRef.current.initInputs();
 
-    props.onAddRecipe(newRecipe);
+    ctx.addRecipe(newRecipe);
+    // props.onAddRecipe(newRecipe);
     event.target.reset();
   };
 
