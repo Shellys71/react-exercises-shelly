@@ -1,14 +1,19 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import Card from "../UI/Card";
 import Recipe from "./Recipe";
 import classes from "./RecipesList.module.css";
+import RecipeContext from "../../store/recipe-context";
 
-const RecipesList = (props) => {
+const RecipesList = () => {
+  const recipeCtx = useContext(RecipeContext);
+
+  const { recipes } = recipeCtx;
+
   return (
     <Card>
       <ul className={classes.recipe}>
-        {props.recipes.map((recipe) => (
+        {recipes.map((recipe) => (
           <li key={recipe.id}>
             <Recipe
               recipe={recipe.recipe}

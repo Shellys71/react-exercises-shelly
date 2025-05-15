@@ -37,13 +37,6 @@ const InputsList = forwardRef((props, ref) => {
     };
   })
 
-  // useEffect(() => {
-  //   setInputsList(() => {
-  //     const initInputs = [""];
-  //     return initInputs;
-  //   });
-  // }, [props.isIngredientsEmpty, props.isInstructionsEmpty])
-
   return (
     <div>
       {inputsList.map((input, index) => (
