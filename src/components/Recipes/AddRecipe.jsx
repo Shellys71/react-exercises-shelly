@@ -19,12 +19,12 @@ const AddRecipe = (props) => {
 
   const addRecipeHandler = (event) => {
     event.preventDefault();
-    
+
     const newRecipe = {
       recipe: enteredRecipe,
       ingredients: enteredIngredients,
       instructions: enteredInstructions,
-      image: uploadedImage
+      image: uploadedImage,
     };
 
     setEnteredRecipe("");
@@ -34,15 +34,32 @@ const AddRecipe = (props) => {
     ingredientsInputsRef.current.initInputs();
     instructionsInputsRef.current.initInputs();
 
+    let existingRecipes = JSON.parse(localStorage.getItem("allRecipes"));
+
+    if (existingRecipes === null) {
+      existingRecipes = [];
+    }
+
+    const newRecipeObject = {
+      recipe: enteredRecipe,
+      ingredients: enteredIngredients,
+      instructions: enteredInstructions,
+      image: uploadedImage,
+    };
+
+    localStorage.setItem("recipe", JSON.stringify(newRecipeObject));
+
+    existingRecipes.push(newRecipeObject);
+    localStorage.setItem("allRecipes", JSON.stringify(existingRecipes));
+
     ctx.addRecipe(newRecipe);
-    // props.onAddRecipe(newRecipe);
     event.target.reset();
   };
 
   const recipeChangeHandler = (event) => {
     setEnteredRecipe(event.target.value);
   };
-  
+
   const ingredientChangeHandler = (ingredient) => {
     setEnteredIngredients(ingredient);
   };
@@ -52,7 +69,7 @@ const AddRecipe = (props) => {
   };
 
   const imageChangeHandler = (event) => {
-    const imageFile= event.target.files[0];
+    const imageFile = event.target.files[0];
     if (imageFile) {
       if (imageFile.type.includes("image")) {
         setUploadedImage(URL.createObjectURL(imageFile));
@@ -75,9 +92,15 @@ const AddRecipe = (props) => {
           required
         />
         <label>Ingredients</label>
-        <InputsList onAddInput={ingredientChangeHandler} ref={ingredientsInputsRef} />
+        <InputsList
+          onAddInput={ingredientChangeHandler}
+          ref={ingredientsInputsRef}
+        />
         <label>Instructions</label>
-        <InputsList onAddInput={instructionsChangeHandler} ref={instructionsInputsRef} />
+        <InputsList
+          onAddInput={instructionsChangeHandler}
+          ref={instructionsInputsRef}
+        />
         <label htmlFor="image">Image</label>
         <input
           id="image"

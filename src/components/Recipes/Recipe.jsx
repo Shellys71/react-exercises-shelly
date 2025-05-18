@@ -1,6 +1,7 @@
 import React from "react";
 import classes from "./Recipe.module.css";
 import Card from "../UI/Card";
+import deleteImage from "../../assets/delete-icon.png";
 
 const Recipe = (props) => {
   return (
@@ -14,7 +15,8 @@ const Recipe = (props) => {
       {props.instructions.map((instuction, index) => (
         <p key={index}>{instuction}</p>
       ))}
-      <img src={props.src} alt="recipe" />
+      <img className={classes["recipe-image"]} src={props.src} alt="recipe" />
+      <img className={classes["delete-icon"]} src={deleteImage} alt="trash" onClick={props.onDeleteRecipe}/>
     </Card>
   );
 };
