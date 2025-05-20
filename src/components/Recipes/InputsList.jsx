@@ -4,10 +4,10 @@ const InputsList = forwardRef((props, ref) => {
   const [inputsList, setInputsList] = useState([""]);
 
   const inputsChangeHandler = (event) => {
-    const isThereNext = inputsList[+event.target.id + 1] !== undefined;
+    const hasNextInput = inputsList[+event.target.id + 1] !== undefined;
     const currentInput = event.target;
 
-    if (!isThereNext) {
+    if (!hasNextInput) {
       setInputsList((prevInputs) => {
         return [...prevInputs, ""];
       });
@@ -25,10 +25,7 @@ const InputsList = forwardRef((props, ref) => {
   };
 
   const initInputs = () => {
-    setInputsList(() => {
-      const initInputs = [""];
-      return initInputs;
-    });
+    setInputsList([""]);
   };
 
   useImperativeHandle(ref, () => {

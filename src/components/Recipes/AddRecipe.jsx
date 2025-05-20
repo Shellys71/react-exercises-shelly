@@ -15,7 +15,7 @@ const AddRecipe = (props) => {
   const [enteredRecipe, setEnteredRecipe] = useState("");
   const [enteredIngredients, setEnteredIngredients] = useState([""]);
   const [enteredInstructions, setEnteredInstructions] = useState([""]);
-  const [uploadedImage, setUploadedImage] = useState("");
+  const [uploadedImage, setUploadedImage] = useState(null);
 
   const addRecipeHandler = (event) => {
     event.preventDefault();
@@ -36,6 +36,10 @@ const AddRecipe = (props) => {
 
     let existingRecipes = JSON.parse(localStorage.getItem("allRecipes"));
 
+    // const imageReader = new FileReader();
+
+    // imageReader.readAsDataURL(uploadedImage);
+
     if (existingRecipes === null) {
       existingRecipes = [];
     }
@@ -45,9 +49,8 @@ const AddRecipe = (props) => {
       ingredients: enteredIngredients,
       instructions: enteredInstructions,
       image: uploadedImage,
+      id: parseInt(Math.random().toString() * 1000),
     };
-
-    localStorage.setItem("recipe", JSON.stringify(newRecipeObject));
 
     existingRecipes.push(newRecipeObject);
     localStorage.setItem("allRecipes", JSON.stringify(existingRecipes));
@@ -70,12 +73,18 @@ const AddRecipe = (props) => {
 
   const imageChangeHandler = (event) => {
     const imageFile = event.target.files[0];
+
+    const imageReader = new FileReader();
+    imageReader.readAsDataURL(imageFile);
+
     if (imageFile) {
       if (imageFile.type.includes("image")) {
-        setUploadedImage(URL.createObjectURL(imageFile));
+        imageReader.onload = (event) => {
+          setUploadedImage(event.target.result);
+        };
       } else {
         alert("Please upload an image file");
-        setUploadedImage("");
+        setUploadedImage(null);
       }
     }
   };
@@ -110,7 +119,7 @@ const AddRecipe = (props) => {
           accept="image/*"
           required
         />
-        <Button type="submit">Add Recipe</Button>
+        <Button isImageUploaded={uploadedImage === null} type="submit">Add Recipe</Button>
       </form>
     </Card>
   );

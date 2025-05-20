@@ -16,7 +16,7 @@ const RecipesList = () => {
   return (
     <ul className={classes.recipes}>
       {recipes.map((recipe, index) => (
-        <li key={index}>
+        <li key={recipe.id}>
           <Recipe
             recipe={recipe.recipe}
             ingredients={recipe.ingredients}

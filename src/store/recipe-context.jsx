@@ -17,19 +17,16 @@ export const RecipeProvider = (props) => {
     }
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem("allRecipes", JSON.stringify(recipeList));
-  }, [recipeList]);
-
   const addRecipeHandler = (recipe) => {
     setRecipeList((prevRecipesList) => {
-      return [...prevRecipesList, { ...recipe, id: Math.random().toString() }];
+      return [...prevRecipesList, { ...recipe }];
     });
   };
 
   const deleteRecipeHandler = (id) => {
     const listWithDeletedRecipe = recipeList.filter((recipe) => recipe.id !== id);
     setRecipeList(listWithDeletedRecipe);
+    localStorage.setItem("allRecipes", JSON.stringify(listWithDeletedRecipe));
   };
 
   return (

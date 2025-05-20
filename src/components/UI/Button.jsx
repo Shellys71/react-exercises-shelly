@@ -4,7 +4,7 @@ import styles from "./Button.module.css";
 
 const Button = (props) => {
   return (
-    <button className={styles.button} type={props.type || "button"}>
+    <button disabled={props.isImageUploaded} className={styles.button} type={props.type || "button"}>
       {props.children}
     </button>
   );
