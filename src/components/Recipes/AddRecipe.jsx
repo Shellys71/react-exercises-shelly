@@ -5,14 +5,21 @@ import Card from "../UI/Card";
 import Button from "../UI/Button";
 import InputsList from "./InputsList";
 import RecipeContext from "../../store/recipe-context";
+import useRecipe from "../hooks/use-recipe";
 
 const AddRecipe = (props) => {
-  const ctx = useContext(RecipeContext);
+  const recipeCtx = useContext(RecipeContext);
 
   const ingredientsInputsRef = useRef();
   const instructionsInputsRef = useRef();
 
-  const [enteredRecipe, setEnteredRecipe] = useState("");
+  const {
+    value: enteredRecipe,
+    valueChangeHandler: recipeChangeHandler,
+    resetHandler: resetRecipeInput
+  } = useRecipe();
+
+  // const [enteredRecipe, setEnteredRecipe] = useState("");
   const [enteredIngredients, setEnteredIngredients] = useState([""]);
   const [enteredInstructions, setEnteredInstructions] = useState([""]);
   const [uploadedImage, setUploadedImage] = useState(null);
@@ -20,29 +27,13 @@ const AddRecipe = (props) => {
   const addRecipeHandler = (event) => {
     event.preventDefault();
 
-    const newRecipe = {
-      recipe: enteredRecipe,
-      ingredients: enteredIngredients,
-      instructions: enteredInstructions,
-      image: uploadedImage,
-    };
-
-    setEnteredRecipe("");
+    resetRecipeInput();
+    // setEnteredRecipe("");
     setEnteredIngredients([""]);
     setEnteredInstructions([""]);
 
     ingredientsInputsRef.current.initInputs();
     instructionsInputsRef.current.initInputs();
-
-    let existingRecipes = JSON.parse(localStorage.getItem("allRecipes"));
-
-    // const imageReader = new FileReader();
-
-    // imageReader.readAsDataURL(uploadedImage);
-
-    if (existingRecipes === null) {
-      existingRecipes = [];
-    }
 
     const newRecipeObject = {
       recipe: enteredRecipe,
@@ -52,16 +43,13 @@ const AddRecipe = (props) => {
       id: parseInt(Math.random().toString() * 1000),
     };
 
-    existingRecipes.push(newRecipeObject);
-    localStorage.setItem("allRecipes", JSON.stringify(existingRecipes));
-
-    ctx.addRecipe(newRecipe);
+    recipeCtx.addRecipe(newRecipeObject);
     event.target.reset();
   };
 
-  const recipeChangeHandler = (event) => {
-    setEnteredRecipe(event.target.value);
-  };
+  // const recipeChangeHandler = (event) => {
+  //   setEnteredRecipe(event.target.value);
+  // };
 
   const ingredientChangeHandler = (ingredient) => {
     setEnteredIngredients(ingredient);

@@ -3,35 +3,75 @@ import React, { useState, useEffect } from "react";
 const RecipeContext = React.createContext({
   recipes: [],
   addRecipe() {},
-  deleteRecipe() {}
+  deleteRecipe() {},
+  editRecipe() {},
 });
 
 export const RecipeProvider = (props) => {
-  const [recipeList, setRecipeList] = useState([]);
+  const [recipesList, setRecipesList] = useState([]);
 
   useEffect(() => {
     const storedRecipesInformation = localStorage.getItem("allRecipes");
 
     if (storedRecipesInformation) {
-      setRecipeList(JSON.parse(storedRecipesInformation));
+      setRecipesList(JSON.parse(storedRecipesInformation));
     }
   }, []);
 
   const addRecipeHandler = (recipe) => {
-    setRecipeList((prevRecipesList) => {
+    let existingRecipes = JSON.parse(localStorage.getItem("allRecipes"));
+
+    if (existingRecipes === null) {
+      existingRecipes = [];
+    }
+
+    existingRecipes.push(recipe);
+    localStorage.setItem("allRecipes", JSON.stringify(existingRecipes));
+
+    setRecipesList((prevRecipesList) => {
       return [...prevRecipesList, { ...recipe }];
     });
   };
 
+  const editRecipeHandler = (id, newRecipeValue) => {
+    const editedRecipeIndex = recipesList.findIndex(
+      (recipe) => recipe.id === id
+    );
+    const editedRecipe = recipesList[editedRecipeIndex];
+
+    const updatedRecipe = {
+      recipe: newRecipeValue,
+      ingredients: editedRecipe.ingredients,
+      instructions: editedRecipe.instructions,
+      image: editedRecipe.image,
+    };
+
+    setRecipesList((prevRecipesList) => {
+      const updatedRecipesList = [...prevRecipesList];
+      updatedRecipesList[editedRecipeIndex] = updatedRecipe;
+
+      localStorage.setItem("allRecipes", JSON.stringify(updatedRecipesList));
+
+      return updatedRecipesList;
+    });
+  };
+
   const deleteRecipeHandler = (id) => {
-    const listWithDeletedRecipe = recipeList.filter((recipe) => recipe.id !== id);
-    setRecipeList(listWithDeletedRecipe);
+    const listWithDeletedRecipe = recipesList.filter(
+      (recipe) => recipe.id !== id
+    );
+    setRecipesList(listWithDeletedRecipe);
     localStorage.setItem("allRecipes", JSON.stringify(listWithDeletedRecipe));
   };
 
   return (
     <RecipeContext.Provider
-      value={{ recipes: recipeList, addRecipe: addRecipeHandler, deleteRecipe: deleteRecipeHandler }}
+      value={{
+        recipes: recipesList,
+        addRecipe: addRecipeHandler,
+        deleteRecipe: deleteRecipeHandler,
+        editRecipe: editRecipeHandler,
+      }}
     >
       {props.children}
     </RecipeContext.Provider>
